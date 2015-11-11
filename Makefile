@@ -15,6 +15,7 @@ LOOP_LEGAL_WEBSITE_URL := $(shell echo $${LOOP_LEGAL_WEBSITE_URL-"https://www.mo
 LOOP_PRODUCT_HOMEPAGE_URL := $(shell echo $${LOOP_PRODUCT_HOMEPAGE_URL-"https://www.firefox.com/hello/"})
 
 NODE_LOCAL_BIN=./node_modules/.bin
+REPO_BIN_DIR=./bin
 
 install: npm_install
 
@@ -44,7 +45,7 @@ test:
 	@echo "Not implemented yet."
 
 runserver: remove_old_config
-	node server.js
+	node $(REPO_BIN_DIR)/server.js
 
 frontend:
 	@echo "Not implemented yet."
