@@ -82,10 +82,6 @@ app.use("/standalone/content", express.static(path.join(__dirname, "content")));
 // files are in the right location.
 app.use("/content", express.static(path.join(__dirname, standaloneContentDir)));
 app.use("/content", express.static(path.join(__dirname, "..", "content")));
-// These two are based on the above, but handle call urls, that have a /c/ in them.
-app.use("/content/c", express.static(path.join(__dirname,
-  standaloneContentDir)));
-app.use("/content/c", express.static(path.join(__dirname, "..", "content")));
 
 // Two lines for the same reason as /content above.
 app.use("/test", express.static(path.join(__dirname, "test")));
