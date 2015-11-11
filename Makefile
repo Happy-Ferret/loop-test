@@ -41,6 +41,15 @@ distclean:
 distserver: remove_old_config dist
 	LOOP_CONTENT_DIR=dist node server.js
 
+BUILT=./built
+
+.PHONY: build
+build:
+	cp -pR standalone $(BUILT)
+	cp -pR shared $(BUILT)/standalone
+	cp -pR add-on $(BUILT)
+	cp -pR shared $(BUILT)/add-on
+
 test:
 	@echo "Not implemented yet."
 
