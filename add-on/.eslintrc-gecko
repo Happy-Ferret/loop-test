@@ -9,6 +9,7 @@
     "generators": true,
     "restParams": true,
     "spread": true,
+    "templateStrings": true,
     "objectLiteralShorthandMethods": true,
   },
   "globals": {
@@ -40,6 +41,7 @@
     "MozLoopPushHandler": true,
     "MozLoopService": true,
     "OS": false,
+    "PrivateBrowsingUtils": false,
     "roomsPushNotification": true,
     "Services": false,
     "Social": false,
