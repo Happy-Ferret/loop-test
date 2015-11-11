@@ -76,22 +76,18 @@ app.use("/ui/loop/", express.static(path.join(__dirname, "..", "content")));
 app.use("/ui/shared/", express.static(path.join(__dirname, "..", "content",
                                                 "shared")));
 
-// This exists exclusively for the unit tests. They are served the
-// whole loop/ directory structure and expect some files in the standalone directory.
-app.use("/standalone/content", express.static(path.join(__dirname, "content")));
+// default to the developer build, not the source tree
+app.use("/", express.static(path.join(topDir, "built", "standalone")));
 
-// We load /content this from  both /content *and* /../content. The first one
-// does what we need for running in the github loop-client context, the second one
-// handles running in the hg repo under mozilla-central and is used so that the shared
-// files are in the right location.
-app.use("/content", express.static(path.join(__dirname, standaloneContentDir)));
-app.use("/content", express.static(path.join(__dirname, "..", "content")));
-
+// Punch a few holes to stuff in the source.  XXX Not sure if this is a great
+// idea or not.
 
 // We want to make the top-level test directory available...
 app.use("/test", express.static(path.join(topDir, "test")));
-
-// ...and it points to tests in other top-level directories
+// ...and it points to stuff we want for testing.  Note that the shared unit
+// tests get all their resources from /standalone/shared in the
+// built directory.  The tests themselves, however, come out of the source
+// tree:
 app.use("/shared/test", express.static(path.join(topDir, "shared", "test")));
 
 // As we don't have hashes on the urls, the best way to serve the index files
