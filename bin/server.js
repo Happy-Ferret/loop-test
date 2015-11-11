@@ -17,7 +17,11 @@ var app = express();
 var compression = require("compression");
 app.use(compression());
 
+/* global __dirname */
 var path = require("path");
+// TODO audit for all uses which use __dirname instead of topDir and see if
+// they can be gotten rid of
+var topDir = path.join(__dirname, "..");
 
 var port = process.env.PORT || 3000;
 var feedbackApiUrl = process.env.LOOP_FEEDBACK_API_URL ||
@@ -83,9 +87,12 @@ app.use("/standalone/content", express.static(path.join(__dirname, "content")));
 app.use("/content", express.static(path.join(__dirname, standaloneContentDir)));
 app.use("/content", express.static(path.join(__dirname, "..", "content")));
 
-// Two lines for the same reason as /content above.
-app.use("/test", express.static(path.join(__dirname, "test")));
-app.use("/test", express.static(path.join(__dirname, "..", "test")));
+
+// We want to make the top-level test directory available...
+app.use("/test", express.static(path.join(topDir, "test")));
+
+// ...and it points to tests in other top-level directories
+app.use("/shared/test", express.static(path.join(topDir, "shared", "test")));
 
 // As we don't have hashes on the urls, the best way to serve the index files
 // appears to be to be to closely filter the url and match appropriately.
