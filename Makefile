@@ -41,14 +41,19 @@ distclean:
 distserver: remove_old_config dist
 	LOOP_CONTENT_DIR=dist node server.js
 
-BUILT=./built
+BUILT := ./built
+BABEL := $(NODE_LOCAL_BIN)/babel --extensions '.jsx'
+
+# XXX ecma3 transform for IE?
+.PHONY: standalone add-on
+standalone add-on:
+	cp -pR $@ $(BUILT)
+	$(BABEL) $@ --out-dir $(BUILT)/$@
+	cp -pR shared $(BUILT)/$@
+	$(BABEL) shared --out-dir $(BUILT)/$@/shared
 
 .PHONY: build
-build:
-	cp -pR standalone $(BUILT)
-	cp -pR shared $(BUILT)/standalone
-	cp -pR add-on $(BUILT)
-	cp -pR shared $(BUILT)/add-on
+build: add-on standalone
 
 test:
 	@echo "Not implemented yet."
