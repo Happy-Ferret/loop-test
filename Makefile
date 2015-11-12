@@ -43,6 +43,7 @@ distserver: remove_old_config dist
 
 BUILT := ./built
 BABEL := $(NODE_LOCAL_BIN)/babel --extensions '.jsx'
+ESLINT := $(NODE_LOCAL_BIN)/eslint
 
 # XXX ecma3 transform for IE?
 .PHONY: standalone add-on
@@ -51,6 +52,9 @@ standalone add-on:
 	$(BABEL) $@ --out-dir $(BUILT)/$@
 	cp -pR shared $(BUILT)/$@
 	$(BABEL) shared --out-dir $(BUILT)/$@/shared
+
+lint:
+	$(ESLINT) --ext .js --ext .jsm --ext .jsx add-on shared standalone
 
 .PHONY: build
 build: add-on standalone
