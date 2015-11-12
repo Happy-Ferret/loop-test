@@ -12,6 +12,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "babel": "5.8.34",
     "classnames": "2.2.0",
     "compression": "1.5.2",
     "eslint": "1.6.0",
