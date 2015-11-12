@@ -76,9 +76,6 @@ app.use("/ui/loop/", express.static(path.join(__dirname, "..", "content")));
 app.use("/ui/shared/", express.static(path.join(__dirname, "..", "content",
                                                 "shared")));
 
-// default to the developer build, not the source tree
-app.use("/", express.static(path.join(topDir, "built", "standalone")));
-
 // Punch a few holes to stuff in the source.  XXX Not sure if this is a great
 // idea or not.
 
@@ -87,7 +84,7 @@ app.use("/test", express.static(path.join(topDir, "test")));
 // ...and it points to stuff we want for testing.  Note that the shared unit
 // tests get all their resources from /standalone/shared in the
 // built directory.  The tests themselves, however, come out of the source
-// tree:
+// tree:r
 app.use("/shared/test", express.static(path.join(topDir, "shared", "test")));
 
 // As we don't have hashes on the urls, the best way to serve the index files
@@ -100,6 +97,9 @@ function serveIndex(req, res) {
 
 app.get(/^\/content\/[\w\-]+$/, serveIndex);
 app.get(/^\/content\/c\/[\w\-]+$/, serveIndex);
+
+// default to the developer build, not the source tree
+app.use("/", express.static(path.join(topDir, "built", "standalone")));
 
 var server = app.listen(port);
 
