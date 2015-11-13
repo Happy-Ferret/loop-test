@@ -83,6 +83,8 @@ app.use("/test", express.static(path.join(topDir, "test")));
 // built directory.  The tests themselves, however, come out of the source
 // tree:r
 app.use("/shared/test", express.static(path.join(topDir, "shared", "test")));
+app.use("/standalone/test", express.static(path.join(topDir, "standalone",
+  "test")));
 
 // As we don't have hashes on the urls, the best way to serve the index files
 // appears to be to be to closely filter the url and match appropriately.
