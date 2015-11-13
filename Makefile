@@ -45,9 +45,11 @@ BUILT := ./built
 BABEL := $(NODE_LOCAL_BIN)/babel --extensions '.jsx'
 ESLINT := $(NODE_LOCAL_BIN)/eslint
 
+# XXX maybe just build one copy of shared in standalone, and then use 
+# server.js magic to redirect?
 # XXX ecma3 transform for IE?
-.PHONY: standalone add-on
-standalone add-on:
+.PHONY: standalone add-on ui
+ui standalone add-on:
 	cp -pR $@ $(BUILT)
 	$(BABEL) $@ --out-dir $(BUILT)/$@
 	cp -pR shared $(BUILT)/$@
@@ -57,7 +59,7 @@ lint:
 	$(ESLINT) --ext .js --ext .jsm --ext .jsx add-on shared standalone
 
 .PHONY: build
-build: add-on standalone
+build: add-on standalone ui
 
 test:
 	@echo "Not implemented yet."
