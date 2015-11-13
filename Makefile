@@ -50,6 +50,7 @@ ESLINT := $(NODE_LOCAL_BIN)/eslint
 # XXX ecma3 transform for IE?
 .PHONY: standalone add-on ui
 ui standalone add-on:
+	mkdir -p $(BUILT)/$@
 	cp -pR $@ $(BUILT)
 	$(BABEL) $@ --out-dir $(BUILT)/$@
 	cp -pR shared $(BUILT)/$@
