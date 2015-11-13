@@ -349,14 +349,14 @@ loop.roomViews = (function(mozL10n) {
                 "triggered": this.state.copiedUrl
               }), 
               onClick: this.handleCopyButtonClick}, 
-              React.createElement("img", {src: "resource://loop/content/shared/img/glyph-link-16x16.svg"}), 
+              React.createElement("img", {src: "shared/img/glyph-link-16x16.svg"}), 
               React.createElement("p", null, mozL10n.get(this.state.copiedUrl ?
                 "invite_copied_link_button" : "invite_copy_link_button"))
             ), 
             React.createElement("div", {className: "btn-email invite-button", 
               onClick: this.handleEmailButtonClick, 
               onMouseOver: this.resetTriggeredButtons}, 
-              React.createElement("img", {src: "resource://loop/content/shared/img/glyph-email-16x16.svg"}), 
+              React.createElement("img", {src: "shared/img/glyph-email-16x16.svg"}), 
               React.createElement("p", null, mozL10n.get("invite_email_link_button"))
             )
           ), 
@@ -542,7 +542,7 @@ loop.roomViews = (function(mozL10n) {
       }
 
       var url = this._getURL();
-      var thumbnail = url && url.thumbnail || "resource://loop/content/shared/img/icons-16x16.svg#globe";
+      var thumbnail = url && url.thumbnail || "shared/img/icons-16x16.svg#globe";
       var urlDescription = url && url.description || "";
       var location = url && url.location || "";
 
@@ -828,8 +828,7 @@ loop.roomViews = (function(mozL10n) {
                 renderRemoteVideo: this.shouldRenderRemoteVideo(), 
                 screenShareMediaElement: this.state.screenShareMediaElement, 
                 screenSharePosterUrl: null, 
-                showInitialContext: false, 
-                useDesktopPaths: true}, 
+                showInitialContext: false}, 
                 React.createElement(sharedViews.ConversationToolbar, {
                   audio: { enabled: !this.state.audioMuted, visible: true}, 
                   dispatcher: this.props.dispatcher, 

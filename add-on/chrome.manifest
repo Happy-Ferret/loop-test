@@ -1,4 +1,4 @@
-content  loop    content/
+content  loop    content/  contentaccessible=yes
 resource loop    ./
 locale   loop    en-US       locale/en-US/
 skin     loop    classic/1.0 skin/linux/    os=Linux

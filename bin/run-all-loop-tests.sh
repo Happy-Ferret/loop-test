@@ -33,7 +33,7 @@ if ! npm run-script build-coverage ; then
 fi
 )
 
-./mach xpcshell-test ${LOOPDIR}/
+#./mach xpcshell-test ${LOOPDIR}/
 ./mach marionette-test ${LOOPDIR}/manifest.ini
 
 # The browser_parsable_css.js can fail if we add some css that isn't parsable.
@@ -44,7 +44,7 @@ fi
 
 TESTS="
   ${LOOPDIR}/test/mochitest
-  browser/extensions/uitour/test/browser_UITour_loop.js
+  browser/components/uitour/test/browser_UITour_loop.js
   browser/base/content/test/general/browser_devices_get_user_media_about_urls.js
   browser/base/content/test/general/browser_parsable_css.js
 "
