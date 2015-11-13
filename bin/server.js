@@ -70,11 +70,8 @@ app.get("/content/c/config.js", getConfigFile);
 // /ui - for the ui showcase
 // /content - for the standalone files.
 
-app.use("/ui", express.static(path.join(__dirname, "..", "ui")));
-app.use("/ui/img/", express.static(path.join(__dirname, "..", "standalone", "content", "img")));
-app.use("/ui/loop/", express.static(path.join(__dirname, "..", "content")));
-app.use("/ui/shared/", express.static(path.join(__dirname, "..", "content",
-                                                "shared")));
+app.use("/ui", express.static(path.join(topDir, "built", "ui")));
+app.use("/add-on", express.static(path.join(topDir, "built", "add-on")));
 
 // Punch a few holes to stuff in the source.  XXX Not sure if this is a great
 // idea or not.
