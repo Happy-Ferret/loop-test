@@ -53,6 +53,7 @@ ui standalone add-on:
 	mkdir -p $(BUILT)/$@
 	cp -pR $@ $(BUILT)
 	$(BABEL) $@ --out-dir $(BUILT)/$@
+	mkdir -p $(BUILT)/$@/shared
 	cp -pR shared $(BUILT)/$@
 	$(BABEL) shared --out-dir $(BUILT)/$@/shared
 
