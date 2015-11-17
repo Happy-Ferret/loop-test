@@ -48,8 +48,8 @@ ESLINT := $(NODE_LOCAL_BIN)/eslint
 # XXX maybe just build one copy of shared in standalone, and then use 
 # server.js magic to redirect?
 # XXX ecma3 transform for IE?
-.PHONY: standalone add-on ui
-ui standalone add-on:
+.PHONY: standalone ui
+standalone ui:
 	mkdir -p $(BUILT)/$@
 	cp -pR $@ $(BUILT)
 	$(BABEL) $@ --out-dir $(BUILT)/$@
@@ -57,11 +57,26 @@ ui standalone add-on:
 	cp -pR shared $(BUILT)/$@
 	$(BABEL) shared --out-dir $(BUILT)/$@/shared
 
+.PHONY: add-on
+add-on:
+	mkdir -p $(BUILT)/$@
+	cp -pR $@/{chrome*,install.rdf,bootstrap.js} $(BUILT)/$@
+	cp -pR $@/panels $(BUILT)/$@/chrome/panels
+	$(BABEL) $@/panels --out-dir $(BUILT)/$@/chrome/panels
+	mkdir -p $(BUILT)/$@/chrome/shared
+	cp -pR shared $(BUILT)/$@/chrome
+	$(BABEL) shared --out-dir $(BUILT)/$@/chrome/shared
+	cp -pR skin $(BUILT)/$@/chrome/skin
+
 lint:
 	$(ESLINT) --ext .js --ext .jsm --ext .jsx add-on shared standalone
 
 .PHONY: build
 build: add-on standalone ui
+
+.PHONY: clean
+clean:
+	rm -rf $(BUILT)
 
 test:
 	@echo "Not implemented yet."
