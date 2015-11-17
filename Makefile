@@ -48,14 +48,23 @@ ESLINT := $(NODE_LOCAL_BIN)/eslint
 # XXX maybe just build one copy of shared in standalone, and then use 
 # server.js magic to redirect?
 # XXX ecma3 transform for IE?
-.PHONY: standalone ui
-standalone ui:
+.PHONY: ui
+ui:
 	mkdir -p $(BUILT)/$@
 	cp -pR $@ $(BUILT)
 	$(BABEL) $@ --out-dir $(BUILT)/$@
 	mkdir -p $(BUILT)/$@/shared
 	cp -pR shared $(BUILT)/$@
 	$(BABEL) shared --out-dir $(BUILT)/$@/shared
+
+.PHONY: standalone
+standalone:
+	mkdir -p $(BUILT)/$@
+	cp -pR $@ $(BUILT)
+	$(BABEL) $@ --out-dir $(BUILT)/$@
+	mkdir -p $(BUILT)/$@/content/shared
+	cp -pR shared $(BUILT)/$@/content
+	$(BABEL) shared --out-dir $(BUILT)/$@/content/shared
 
 .PHONY: add-on
 add-on:
@@ -86,6 +95,9 @@ build: add-on standalone ui xpi
 .PHONY: clean
 clean:
 	rm -rf $(BUILT)
+
+.PHONY: cleanbuild
+cleanbuild: clean build
 
 test:
 	@echo "Not implemented yet."
