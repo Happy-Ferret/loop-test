@@ -21,6 +21,8 @@ app.use(compression());
 var path = require("path");
 // TODO audit for all uses which use __dirname instead of topDir and see if
 // they can be gotten rid of
+// XXX the reason for .. here is because we're depending on the current
+// reality of server.js being started from ./bin in the repo.
 var topDir = path.join(__dirname, "..");
 
 var port = process.env.PORT || 3000;
@@ -31,7 +33,8 @@ var loopServerUrl = process.env.LOOP_SERVER_URL || "http://localhost:5000";
 
 // This is typically overridden with "dist" so that it's possible to test the
 // optimized version, once it's been built to the "dist" directory
-var standaloneContentDir = process.env.LOOP_CONTENT_DIR || "content";
+var standaloneContentDir = process.env.LOOP_CONTENT_DIR ||
+  path.join(topDir, "built", "standalone", "content");
 
 // Remove trailing slashes as double slashes in the url can confuse the server
 // responses.
@@ -94,14 +97,17 @@ app.use("/add-on/panels/test", express.static(path.join(topDir, "add-on",
 function serveIndex(req, res) {
   "use strict";
 
-  return res.sendFile(path.join(__dirname, standaloneContentDir, "index.html"));
+  return res.sendFile(path.join(standaloneContentDir, "index.html"));
 }
 
 app.get(/^\/content\/[\w\-]+$/, serveIndex);
 app.get(/^\/content\/c\/[\w\-]+$/, serveIndex);
 
-// default to the developer build, not the source tree
-app.use("/", express.static(path.join(topDir, "built", "standalone")));
+// XXX This / entry is only currently mostly necessary for some test stuff.
+// I suspect we want to adjust the paths and get rid of this.
+app.use("/", express.static(standaloneContentDir));
+
+app.use("/content", express.static(standaloneContentDir));
 
 var server = app.listen(port);
 
