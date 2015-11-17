@@ -71,8 +71,17 @@ add-on:
 lint:
 	$(ESLINT) --ext .js --ext .jsm --ext .jsx add-on shared standalone
 
+XPI_FILE := built/add-on/loop@test.mozilla.org.xpi 
+
+# so we can type "make xpi" without depend on the file directly
+.PHONY: xpi
+xpi: $(XPI_FILE)
+
+$(XPI_FILE): $(REPO_BIN_DIR)/build_extension.sh build
+		$(REPO_BIN_DIR)/build_extension.sh
+
 .PHONY: build
-build: add-on standalone ui
+build: add-on standalone ui xpi
 
 .PHONY: clean
 clean:
