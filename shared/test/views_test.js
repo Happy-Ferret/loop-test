@@ -16,10 +16,14 @@ describe("loop.shared.views", function() {
   var sandbox, fakeAudioXHR, dispatcher, OS, OSVersion;
 
   beforeEach(function() {
-    sandbox = sinon.sandbox.create();
+    sandbox = LoopMochaUtils.createSandbox();
     sandbox.useFakeTimers(); // exposes sandbox.clock as a fake timer
     sandbox.stub(l10n, "get", function(x) {
       return "translated:" + x;
+    });
+
+    LoopMochaUtils.stubLoopRequest({
+      GetLoopPref: function() {}
     });
 
     dispatcher = new loop.Dispatcher();
@@ -52,6 +56,7 @@ describe("loop.shared.views", function() {
   afterEach(function() {
     loop.store.StoreMixin.clearRegisteredStores();
     sandbox.restore();
+    LoopMochaUtils.restore();
   });
 
   describe("MediaControlButton", function() {
@@ -285,14 +290,14 @@ describe("loop.shared.views", function() {
   });
 
   describe("SettingsControlButton", function() {
-    var fakeMozLoop;
+    var requestStubs;
     var support_url = "https://support.com";
 
     beforeEach(function() {
-      fakeMozLoop = {
-        openURL: sandbox.stub(),
-        setLoopPref: sandbox.stub(),
-        getLoopPref: function(prefName) {
+      LoopMochaUtils.stubLoopRequest(requestStubs = {
+        OpenURL: sandbox.stub(),
+        SetLoopPref: sandbox.stub(),
+        GetLoopPref: function(prefName) {
           switch (prefName) {
             case "support_url":
               return support_url;
@@ -300,14 +305,10 @@ describe("loop.shared.views", function() {
               return prefName;
           }
         }
-      };
+      });
     });
 
     function mountTestComponent(props) {
-      props = _.extend({
-        mozLoop: fakeMozLoop
-      }, props);
-
       return TestUtils.renderIntoDocument(
         React.createElement(sharedViews.SettingsControlButton, props));
     }
@@ -433,8 +434,8 @@ describe("loop.shared.views", function() {
 
       TestUtils.Simulate.click(comp.getDOMNode().querySelector(".settings-menu > li:last-child"));
 
-      sinon.assert.calledOnce(fakeMozLoop.openURL);
-      sinon.assert.calledWithExactly(fakeMozLoop.openURL, support_url);
+      sinon.assert.calledOnce(requestStubs.OpenURL);
+      sinon.assert.calledWithExactly(requestStubs.OpenURL, support_url);
     });
   });
 
@@ -444,7 +445,6 @@ describe("loop.shared.views", function() {
     function mountTestComponent(props) {
       props = _.extend({
         dispatcher: dispatcher,
-        mozLoop: {},
         show: true
       }, props || {});
       return TestUtils.renderIntoDocument(
@@ -773,8 +773,7 @@ describe("loop.shared.views", function() {
         allowClick: false,
         description: "test",
         dispatcher: dispatcher,
-        showContextTitle: false,
-        useDesktopPaths: false
+        showContextTitle: false
       }, extraProps);
       return TestUtils.renderIntoDocument(
         React.createElement(sharedViews.ContextUrlView, props));
@@ -817,16 +816,6 @@ describe("loop.shared.views", function() {
 
       expect(view.getDOMNode().querySelector(".context-preview").getAttribute("src"))
         .eql("shared/img/icons-16x16.svg#globe");
-    });
-
-    it("should use a default thumbnail for desktop if one is not supplied", function() {
-      view = mountTestComponent({
-        useDesktopPaths: true,
-        url: "http://wonderful.invalid"
-      });
-
-      expect(view.getDOMNode().querySelector(".context-preview").getAttribute("src"))
-        .eql("loop/shared/img/icons-16x16.svg#globe");
     });
 
     it("should not display a title if by default", function() {
