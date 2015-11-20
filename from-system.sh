@@ -18,5 +18,6 @@ cp -R $SYSTEM/skin .
 cp -R $SYSTEM/test/desktop-local/ add-on/panels/test
 cp -R $SYSTEM/test/mochitest/ add-on/chrome/test/mochitest
 cp -R $SYSTEM/test/xpcshell/ add-on/chrome/test/xpcshell
+cp -R $SYSTEM/test/shared/ shared/test
 
 cp -R $SYSTEM/ui/ ui
