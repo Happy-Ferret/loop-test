@@ -70,7 +70,8 @@ standalone:
 add-on:
 	mkdir -p $(BUILT)/$@
 	cp -pR $@/{chrome*,install.rdf,bootstrap.js} $(BUILT)/$@
-	cp -pR $@/panels $(BUILT)/$@/chrome/panels
+	mkdir -p $(BUILT)/$@/chrome/panels
+	cp -pR $@/panels $(BUILT)/$@/chrome
 	$(BABEL) $@/panels --out-dir $(BUILT)/$@/chrome/panels
 	mkdir -p $(BUILT)/$@/chrome/shared
 	cp -pR shared $(BUILT)/$@/chrome
@@ -80,7 +81,7 @@ add-on:
 lint:
 	$(ESLINT) --ext .js --ext .jsm --ext .jsx add-on shared standalone
 
-XPI_FILE := built/add-on/loop@test.mozilla.org.xpi 
+XPI_FILE := built/add-on/loop@test.mozilla.org.xpi
 
 # so we can type "make xpi" without depend on the file directly
 .PHONY: xpi
