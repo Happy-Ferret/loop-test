@@ -263,6 +263,10 @@ var WindowListener = {
           // Add observer notifications before the service is initialized
           Services.obs.addObserver(this, "loop-status-changed", false);
 
+          window.addEventListener("unload", () => {
+            this.uninit();
+          });
+
           // This is a promise for test purposes, but we don't want to be logging
           // expected errors to the console, so we catch them here.
           this.MozLoopService.initialize().catch(ex => {
@@ -276,6 +280,7 @@ var WindowListener = {
         },
 
         uninit: function() {
+          console.log("uninit!");
           Services.obs.removeObserver(this, "loop-status-changed");
         },
 
@@ -661,27 +666,44 @@ var WindowListener = {
   }
 };
 
-function startup(data, reason)
-{
+function loadDefaultPrefs() {
+  var branch = Services.prefs.getDefaultBranch("");
+  Services.scriptloader.loadSubScript("chrome://loop/content/preferences/prefs.js", {
+    pref: (key, val) => {
+      switch (typeof val) {
+        case "boolean":
+          branch.setBoolPref(key, val);
+          break;
+        case "number":
+          branch.setIntPref(key, val);
+          break;
+        case "string":
+          branch.setCharPref(key, val);
+          break;
+      }
+    }
+  });
+}
+
+function createLoopButton() {
   /**
-    * formerly in CustomizableUI.jsm
-    */
+  * formerly in CustomizableUI.jsm
+  */
   CustomizableUI.createWidget({
     id: "loop-button",
     type: "custom",
-    // FIXME: label: "loop-call-button3.label",
-    // FIXME: tooltiptext: "loop-call-button3.tooltiptext",
+    label: "loop-call-button3.label",
+    tooltiptext: "loop-call-button3.tooltiptext",
     privateBrowsingTooltiptext: "loop-call-button3-pb.tooltiptext",
     defaultArea: CustomizableUI.AREA_NAVBAR,
     removable: true,
     label: "Loop",
     tooltiptext: "Video chat and screen sharing",
     onBuild: function(aDocument) {
-      // FIXME - remove? could just disable add-on instead of using pref
       // If we're not supposed to see the button, return zip.
-      // if (!Services.prefs.getBoolPref("loop.enabled")) {
-      //   return null;
-      // }
+      if (!Services.prefs.getBoolPref("loop.enabled")) {
+        return null;
+      }
 
       let isWindowPrivate = PrivateBrowsingUtils.isWindowPrivate(aDocument.defaultView);
 
@@ -707,6 +729,13 @@ function startup(data, reason)
       return node;
     }
   });
+}
+
+function startup(data, reason)
+{
+  loadDefaultPrefs();
+
+  createLoopButton();
 
   // Attach to hidden window (for os x).
   try {
@@ -735,8 +764,13 @@ function startup(data, reason)
   // load stylesheet
   let styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"]
                           .getService(Components.interfaces.nsIStyleSheetService);
-  let styleSheetURI = Services.io.newURI("chrome://loop/skin/toolbar.css", null, null);
-  styleSheetService.loadAndRegisterSheet(styleSheetURI, styleSheetService.USER_SHEET);
+  let sheets = ["chrome://loop/content/addon/css/loop.css",
+                "chrome://loop/skin/platform.css"];
+  for (let sheet of sheets) {
+    let styleSheetURI = Services.io.newURI(sheet, null, null);
+    styleSheetService.loadAndRegisterSheet(styleSheetURI,
+                                           styleSheetService.USER_SHEET);
+  }
 }
 
 function shutdown(data, reason)
@@ -767,17 +801,20 @@ function shutdown(data, reason)
   // unload stylesheet
   let styleSheetService = Cc["@mozilla.org/content/style-sheet-service;1"]
                           .getService(Components.interfaces.nsIStyleSheetService);
-  let styleSheetURI = Services.io.newURI("chrome://loop/skin/toolbar.css", null, null);
-  if (styleSheetService.sheetRegistered(styleSheetURI, styleSheetService.USER_SHEET)) {
-    styleSheetService.unregisterSheet(styleSheetURI, styleSheetService.USER_SHEET);
+  let sheets = ["chrome://loop/content/addon/css/loop.css",
+                "chrome://loop/skin/platform.css"];
+  for (let sheet of sheets) {
+    let styleSheetURI = Services.io.newURI(sheet, null, null);
+    if (styleSheetService.sheetRegistered(styleSheetURI,
+                                          styleSheetService.USER_SHEET))
+      styleSheetService.unregisterSheet(styleSheetURI,
+                                        styleSheetService.USER_SHEET);
   }
 
   // unload modules
   Cu.unload("chrome://loop/content/modules/MozLoopAPI.jsm");
   Cu.unload("chrome://loop/content/modules/LoopRooms.jsm");
   Cu.unload("chrome://loop/content/modules/MozLoopService.jsm");
-
-
 }
 
 function install(data, reason) {}
