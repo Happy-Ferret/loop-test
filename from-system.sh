@@ -1,8 +1,8 @@
 SYSTEM=../system-addons/browser/extensions/loop
 
 cp $SYSTEM/{.eslintignore,.eslintrc,README.txt} .
-cp $SYSTEM/{.eslintrc-gecko,bootstrap.js,chrome.manifest,install.rdf} add-on
-cp $SYSTEM/{build-jsx,build_extension.sh,jar.mn,manifest.ini,moz.build,run-all-loop-tests.sh} bin
+cp $SYSTEM/{.eslintrc-gecko,bootstrap.js,install.rdf} add-on
+cp $SYSTEM/{build-jsx,jar.mn,manifest.ini,moz.build,run-all-loop-tests.sh} bin
 
 cp -R $SYSTEM/content/modules/ add-on/chrome/modules
 
