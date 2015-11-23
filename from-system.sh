@@ -21,3 +21,12 @@ cp -R $SYSTEM/test/xpcshell/ add-on/chrome/test/xpcshell
 cp -R $SYSTEM/test/shared/ shared/test
 
 cp -R $SYSTEM/ui/ ui
+
+# this assumes that in the system-addons tree, an up-to-date build has been
+# done before running this script, so that a chrome.manifest generated
+# from the current jar.mn can be copied into this repo.  
+#
+# XXX we need to write a python script that uses mozbuild
+# (presumably from PyPI) to do this generation directly
+FEATURE=../system-addons/obj-*/dist/bin/browser/features/loop@test.mozilla.org
+cp $FEATURE/chrome.manifest add-on/
