@@ -9,6 +9,8 @@ cp -R $SYSTEM/content/modules/ add-on/chrome/modules
 rm -Rf add-on/panels/{css,js}
 cp -R $SYSTEM/content/panels/ add-on/panels
 
+cp -R $SYSTEM/content/preferences/ add-on/preferences
+
 rm -Rf shared/{css,img,js,sounds,vendor}
 cp -R $SYSTEM/content/shared/ shared
 
