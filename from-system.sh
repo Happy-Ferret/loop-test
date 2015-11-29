@@ -1,7 +1,7 @@
-SYSTEM=../system-addons/browser/extensions/loop
+SYSTEM=../gecko-dev/browser/extensions/loop
 
 cp $SYSTEM/{.eslintignore,.eslintrc,README.txt} .
-cp $SYSTEM/{.eslintrc-gecko,bootstrap.js,install.rdf} add-on
+cp $SYSTEM/{.eslintrc-gecko,bootstrap.js,install.rdf.in} add-on
 cp $SYSTEM/{build-jsx,jar.mn,manifest.ini,moz.build,run-all-loop-tests.sh} bin
 
 cp -R $SYSTEM/content/modules/ add-on/chrome/modules
@@ -30,5 +30,5 @@ cp -R $SYSTEM/ui/ ui
 #
 # XXX we need to write a python script that uses mozbuild
 # (presumably from PyPI) to do this generation directly
-FEATURE=../system-addons/obj-*/dist/bin/browser/features/loop@test.mozilla.org
+FEATURE=../gecko-dev/obj*/dist/bin/browser/features/loop@mozilla.org
 cp $FEATURE/chrome.manifest add-on/
