@@ -22,11 +22,12 @@ pref("loop.feedback.dateLastSeenSec", 0);
 pref("loop.feedback.periodSec", 15770000); // 6 months.
 pref("loop.feedback.formURL", "https://www.mozilla.org/firefox/hello/npssurvey/");
 pref("loop.feedback.manualFormURL", "https://www.mozilla.org/firefox/hello/feedbacksurvey/");
-#ifdef DEBUG
+// XXX FIX ME
+// #ifdef DEBUG
 pref("loop.CSP", "default-src 'self' about: file: chrome: http://localhost:*; img-src * data:; font-src 'none'; connect-src wss://*.tokbox.com https://*.opentok.com https://*.tokbox.com wss://*.mozilla.com https://*.mozilla.org wss://*.mozaws.net http://localhost:* ws://localhost:*; media-src blob:");
-#else
-pref("loop.CSP", "default-src 'self' about: file: chrome:; img-src * data:; font-src 'none'; connect-src wss://*.tokbox.com https://*.opentok.com https://*.tokbox.com wss://*.mozilla.com https://*.mozilla.org wss://*.mozaws.net; media-src blob:");
-#endif
+// #else
+// pref("loop.CSP", "default-src 'self' about: file: chrome:; img-src * data:; font-src 'none'; connect-src wss://*.tokbox.com https://*.opentok.com https://*.tokbox.com wss://*.mozilla.com https://*.mozilla.org wss://*.mozaws.net; media-src blob:");
+// #endif
 pref("loop.fxa_oauth.tokendata", "");
 pref("loop.fxa_oauth.profile", "");
 pref("loop.support_url", "https://support.mozilla.org/kb/group-conversations-firefox-hello-webrtc");

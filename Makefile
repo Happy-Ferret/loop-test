@@ -80,6 +80,8 @@ add-on:
 	cp -pR $@/chrome/modules $(BUILT)/$@/chrome/content
 	mkdir -p $(BUILT)/$@/chrome/test
 	cp -pR $@/chrome/test $(BUILT)/$@/chrome
+	mkdir -p $(BUILT)/$@/chrome/content/preferences
+	cp -pR $@/preferences $(BUILT)/$@/chrome/content
 	mkdir -p $(BUILT)/$@/chrome/content/shared
 	cp -pR shared $(BUILT)/$@/chrome/content
 	$(BABEL) shared --out-dir $(BUILT)/$@/chrome/content/shared
