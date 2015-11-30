@@ -68,6 +68,7 @@ describe("loop.panel", function() {
       Confirm: sinon.stub(),
       GetHasEncryptionKey: function() { return true; },
       HangupAllChatWindows: function() {},
+      IsMultiProcessEnabled: sinon.stub(),
       LoginToFxA: sinon.stub(),
       LogoutFromFxA: sinon.stub(),
       NotifyUITour: sinon.stub(),
@@ -81,7 +82,10 @@ describe("loop.panel", function() {
       roomToken: "QzBbvGmIZWU",
       roomUrl: "http://sample/QzBbvGmIZWU",
       decryptedContext: {
-        roomName: roomName
+        roomName: roomName,
+        urls: [{
+          location: "http://testurl.com"
+        }]
       },
       maxSize: 2,
         participants: [{
@@ -591,6 +595,17 @@ describe("loop.panel", function() {
           // Do nothing
         }
       });
+
+      it("should render a E10sNotSupported when multiprocess is enabled", function() {
+        LoopMochaUtils.stubLoopRequest({
+          IsMultiProcessEnabled: function() { return true; }
+        });
+
+        var view = createTestPanelView();
+
+        TestUtils.findRenderedComponentWithType(view, loop.panel.E10sNotSupported);
+      });
+
     });
   });
 
@@ -653,12 +668,23 @@ describe("loop.panel", function() {
     });
 
     describe("Copy button", function() {
-      var roomEntry;
+      var roomEntry, openURLStub;
 
       beforeEach(function() {
         // Stub to prevent warnings where no stores are set up to handle the
         // actions we are testing.
         sandbox.stub(dispatcher, "dispatch");
+        openURLStub = sinon.stub();
+
+        LoopMochaUtils.stubLoopRequest({
+          GetSelectedTabMetadata: function() {
+            return {
+              url: "http://invalid.com",
+              description: "fakeSite"
+            };
+          },
+          OpenURL: openURLStub
+        });
 
         roomEntry = mountRoomEntry({
           deleteRoom: sandbox.stub(),
@@ -704,6 +730,32 @@ describe("loop.panel", function() {
           TestUtils.Simulate.click(roomEntry.refs.roomEntry.getDOMNode());
 
           sinon.assert.notCalled(dispatcher.dispatch);
+        });
+
+        it("should open a new tab with the room context if it is not the same as the currently open tab", function() {
+          TestUtils.Simulate.click(roomEntry.refs.roomEntry.getDOMNode());
+          sinon.assert.calledOnce(openURLStub);
+          sinon.assert.calledWithExactly(openURLStub, "http://testurl.com");
+        });
+
+        it("should not open a new tab if the context is the same as the currently open tab", function() {
+          LoopMochaUtils.stubLoopRequest({
+            GetSelectedTabMetadata: function() {
+              return {
+                url: "http://testurl.com",
+                description: "fakeSite"
+              };
+            }
+          });
+
+          roomEntry = mountRoomEntry({
+            deleteRoom: sandbox.stub(),
+            isOpenedRoom: false,
+            room: new loop.store.Room(roomData)
+          });
+
+          TestUtils.Simulate.click(roomEntry.refs.roomEntry.getDOMNode());
+          sinon.assert.notCalled(openURLStub);
         });
       });
     });

@@ -1,37 +1,26 @@
-/* Loop/ Hello browser styles */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-notification[value="loop-sharing-notification"] .button-menubutton-button {
-  -moz-appearance: none;
-  min-width: 0;
-  border: 0;
-  margin: 0;
-}
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
-notification[value="loop-sharing-notification"] .messageImage {
-  list-style-image: url(chrome://browser/skin/webRTC-shareScreen-16.png);
-}
+/* Only apply to browser.xul documents */
+@-moz-document url("chrome://browser/content/browser.xul") {
+  /**
+   * XXX Due to bug 1228542, anything in this file that overrides a browser style
+   * must specify !important. Otherwise the style won't get applied correctly
+   * due to the limitations caused by the bug.
+   */
 
-@media (-moz-windows-theme: luna-silver) and (max-resolution: 1dppx) {
-  :-moz-any(@primaryToolbarButtons@),
-  #bookmarks-menu-button.toolbarbutton-1 > .toolbarbutton-menubutton-dropmarker > .dropmarker-icon {
-    list-style-image: url("chrome://browser/skin/Toolbar-lunaSilver.png");
+  @media (-moz-windows-theme: luna-silver) and (max-resolution: 1dppx) {
+    #loop-button {
+      list-style-image: url(chrome://loop/skin/toolbar-lunaSilver.png)
+    }
   }
 
-  #loop-button {
-    list-style-image: url(chrome://browser/skin/loop/toolbar-lunaSilver.png)
-  }
-
-  #PanelUI-menu-button.thumburger {
-    list-style-image: url("chrome://browser/skin/customizableui/thumburger-lunaSilver.png") !important;
-  }
-}
-
-@media (-moz-windows-theme: luna-silver) and (min-resolution: 1.1dppx) {
-  #loop-button {
-    list-style-image: url(chrome://browser/skin/loop/toolbar-lunaSilver@2x.png)
-  }
-
-  #PanelUI-menu-button.thumburger {
-    list-style-image: url("chrome://browser/skin/customizableui/thumburger-lunaSilver@2x.png") !important;
+  @media (-moz-windows-theme: luna-silver) and (min-resolution: 1.1dppx) {
+    #loop-button {
+      list-style-image: url(chrome://loop/skin/toolbar-lunaSilver@2x.png)
+    }
   }
 }

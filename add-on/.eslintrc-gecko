@@ -7,10 +7,10 @@
     "blockBindings": true,
     "destructuring": true,
     "generators": true,
+    "objectLiteralShorthandMethods": true,
     "restParams": true,
     "spread": true,
     "templateStrings": true,
-    "objectLiteralShorthandMethods": true,
   },
   "globals": {
     // Gecko + Loop Globals.

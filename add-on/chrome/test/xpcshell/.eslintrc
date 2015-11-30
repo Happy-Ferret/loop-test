@@ -17,9 +17,9 @@
     "do_timeout": false,
     "run_next_test": false,
     // head.js items.
+    "FileUtils": false,
     "MockWebSocketChannel": false,
     "extend": true,
-    "FileUtils": false,
     "getLoopString": false,
     "kServerPushUrl": true,
     "kEndPointUrl": true,

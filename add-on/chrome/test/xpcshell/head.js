@@ -14,12 +14,12 @@ Cu.import("resource://gre/modules/Services.jsm");
 // Setup the add-ons manager for this test.
 Cu.import("resource://gre/modules/FileUtils.jsm");
 
-function registerDirectory(aKey, aDir) {
-  var dirProvider = {
-    getFile: function(aProp, aPersistent) {
-      aPersistent.value = false;
-      if (aProp == aKey) {
-        return aDir.clone();
+function registerDirectory(key, dir) {
+  let dirProvider = {
+    getFile: function(prop, persistent) {
+      persistent.value = false;
+      if (prop == key) {
+        return dir.clone();
       }
       return null;
     },
@@ -42,8 +42,8 @@ updateAppInfo();
 // Now trigger the addons-startup, and hence startup the manager itself. This
 // should load the manager correctly.
 var gInternalManager = Cc["@mozilla.org/addons/integration;1"]
-                    .getService(Ci.nsIObserver)
-                    .QueryInterface(Ci.nsITimerCallback);
+  .getService(Ci.nsIObserver)
+  .QueryInterface(Ci.nsITimerCallback);
 
 gInternalManager.observe(null, "addons-startup", null);
 
