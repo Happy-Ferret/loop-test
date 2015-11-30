@@ -75,7 +75,7 @@ app.get("/content/c/config.js", getConfigFile);
 
 app.use("/ui", express.static(path.join(topDir, "built", "ui")));
 app.use("/add-on", express.static(
-  path.join(topDir, "built", "add-on", "chrome")));
+  path.join(topDir, "built", "add-on", "chrome", "content")));
 
 // Punch a few holes to stuff in the source.  XXX Not sure if this is a great
 // idea or not.
