@@ -1,8 +1,13 @@
 #!/bin/sh
 
-cd built/add-on
-if [ -f loop\@test.mozilla.org.xpi ]; then
-  rm loop\@test.mozilla.org.xpi
+set -v
+
+echo $1
+
+cd built/
+if [ -f $1 ]; then
+  rm $1
 fi
 
-zip -r loop\@test.mozilla.org.xpi .
+cd $2
+zip -r ../$1 .

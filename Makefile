@@ -70,27 +70,32 @@ standalone:
 .PHONY: add-on
 add-on:
 	mkdir -p $(BUILT)/$@
-	cp -pR $@/{chrome*,bootstrap.js} $(BUILT)/$@
-	sed "s/@FIREFOX_VERSION@/45.0/g" add-on/install.rdf.in > $(BUILT)/$@/install.rdf
-	mkdir -p $(BUILT)/$@/chrome/panels
-	cp -pR $@/panels $(BUILT)/$@/chrome
-	$(BABEL) $@/panels --out-dir $(BUILT)/$@/chrome/panels
-	mkdir -p $(BUILT)/$@/chrome/shared
-	cp -pR shared $(BUILT)/$@/chrome
-	$(BABEL) shared --out-dir $(BUILT)/$@/chrome/shared
+	cp -pR $@/{chrome.manifest,bootstrap.js} $(BUILT)/$@
+	sed "s/@FIREFOX_VERSION@/$(FIREFOX_VERSION)/g" add-on/install.rdf.in | \
+		grep -v "#filter substitution" > $(BUILT)/$@/install.rdf
+	mkdir -p $(BUILT)/$@/chrome/content/panels
+	cp -pR $@/panels $(BUILT)/$@/chrome/content
+	$(BABEL) $@/panels --out-dir $(BUILT)/$@/chrome/content/panels
+	mkdir -p $(BUILT)/$@/chrome/content/modules
+	cp -pR $@/chrome/modules $(BUILT)/$@/chrome/content
+	mkdir -p $(BUILT)/$@/chrome/test
+	cp -pR $@/chrome/test $(BUILT)/$@/chrome
+	mkdir -p $(BUILT)/$@/chrome/content/shared
+	cp -pR shared $(BUILT)/$@/chrome/content
+	$(BABEL) shared --out-dir $(BUILT)/$@/chrome/content/shared
 	cp -pR skin $(BUILT)/$@/chrome/skin
 
 lint:
 	$(ESLINT) --ext .js --ext .jsm --ext .jsx add-on shared standalone
 
-XPI_FILE := built/add-on/loop@test.mozilla.org.xpi
+XPI_FILE := built/loop@mozilla.org.xpi
 
 # so we can type "make xpi" without depend on the file directly
 .PHONY: xpi
 xpi: $(XPI_FILE)
 
 $(XPI_FILE): $(REPO_BIN_DIR)/build_extension.sh build
-		$(REPO_BIN_DIR)/build_extension.sh
+		$(REPO_BIN_DIR)/build_extension.sh $(@F) add-on
 
 .PHONY: build
 build: add-on standalone ui xpi
