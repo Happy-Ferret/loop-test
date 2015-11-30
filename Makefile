@@ -13,6 +13,7 @@ LOOP_DOWNLOAD_FIREFOX_URL := $(shell echo $${LOOP_DOWNLOAD_FIREFOX_URL-"https://
 LOOP_PRIVACY_WEBSITE_URL := $(shell echo $${LOOP_PRIVACY_WEBSITE_URL-"https://www.mozilla.org/privacy/firefox-hello/"})
 LOOP_LEGAL_WEBSITE_URL := $(shell echo $${LOOP_LEGAL_WEBSITE_URL-"https://www.mozilla.org/about/legal/terms/firefox-hello/"})
 LOOP_PRODUCT_HOMEPAGE_URL := $(shell echo $${LOOP_PRODUCT_HOMEPAGE_URL-"https://www.firefox.com/hello/"})
+FIREFOX_VERSION=45.0
 
 NODE_LOCAL_BIN=./node_modules/.bin
 REPO_BIN_DIR=./bin
@@ -69,7 +70,8 @@ standalone:
 .PHONY: add-on
 add-on:
 	mkdir -p $(BUILT)/$@
-	cp -pR $@/{chrome*,install.rdf,bootstrap.js} $(BUILT)/$@
+	cp -pR $@/{chrome*,bootstrap.js} $(BUILT)/$@
+	sed "s/@FIREFOX_VERSION@/45.0/g" add-on/install.rdf.in > $(BUILT)/$@/install.rdf
 	mkdir -p $(BUILT)/$@/chrome/panels
 	cp -pR $@/panels $(BUILT)/$@/chrome
 	$(BABEL) $@/panels --out-dir $(BUILT)/$@/chrome/panels
