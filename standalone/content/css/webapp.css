@@ -87,7 +87,7 @@ html[dir="rtl"] .standalone-overlay-wrapper > .general-support-url {
   background-size: contain;
   width: 16px;
   height: 16px;
-  background: transparent url("../shared/img/svg/glyph-help-16x16.svg") no-repeat;
+  background: transparent url("../shared/img/glyph-help-16x16.svg") no-repeat;
 }
 
 .standalone-overlay-wrapper > .standalone-moz-logo {
@@ -239,6 +239,7 @@ html[dir="rtl"] .standalone-overlay-wrapper > .standalone-moz-logo {
   color: #4a4a4a;
   margin: auto;
   padding: 0 5px;
+  width: 100%;
 }
 
 .room-inner-info-area > button {
@@ -270,7 +271,7 @@ html[dir="rtl"] .standalone-overlay-wrapper > .standalone-moz-logo {
 }
 
 .room-inner-info-area > .room-waiting-area > a >.room-waiting-help {
-  background: transparent url("../shared/img/svg/glyph-help-16x16.svg") no-repeat;
+  background: transparent url("../shared/img/glyph-help-16x16.svg") no-repeat;
   display: inline-block;
   height: 16px;
   margin-left: 5px;
