@@ -109,8 +109,7 @@ clean:
 .PHONY: cleanbuild
 cleanbuild: clean build
 
-test:
-	@echo "Not implemented yet."
+test: lint
 
 runserver: remove_old_config
 	node $(REPO_BIN_DIR)/server.js
