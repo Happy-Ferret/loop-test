@@ -43,10 +43,17 @@ distserver: remove_old_config dist
 	LOOP_CONTENT_DIR=dist node server.js
 
 BUILT := ./built
+VENV := $(BUILT)/.venv
 BABEL := $(NODE_LOCAL_BIN)/babel --extensions '.jsx'
 ESLINT := $(NODE_LOCAL_BIN)/eslint
+FLAKE8 := $(NODE_LOCAL_BIN)/flake8
 
-# XXX maybe just build one copy of shared in standalone, and then use 
+.PHONY: .venv
+.venv:
+	virtualenv -p python2.7 $(VENV)
+	. $(VENV)/bin/activate && pip install -r bin/require.pip
+
+# XXX maybe just build one copy of shared in standalone, and then use
 # server.js magic to redirect?
 # XXX ecma3 transform for IE?
 .PHONY: ui
@@ -87,8 +94,22 @@ add-on:
 	$(BABEL) shared --out-dir $(BUILT)/$@/chrome/content/shared
 	cp -pR skin $(BUILT)/$@/chrome/skin
 
-lint:
+#
+# Tests
+#
+
+eslint:
 	$(ESLINT) --ext .js --ext .jsm --ext .jsx add-on shared standalone
+
+flake8: .venv
+	. $(VENV)/bin/activate && flake8 .
+
+.PHONY: lint
+lint: eslint flake8
+
+#
+# Build & run
+#
 
 XPI_FILE := built/loop@mozilla.org.xpi
 
@@ -111,7 +132,7 @@ cleanbuild: clean build
 
 test: lint
 
-runserver: remove_old_config
+runserver: remove_old_config standalone
 	node $(REPO_BIN_DIR)/server.js
 
 frontend:
