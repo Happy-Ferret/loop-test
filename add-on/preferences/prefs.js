@@ -1,3 +1,5 @@
+/* eslint strict:0 */
+
 pref("loop.enabled", true);
 pref("loop.textChat.enabled", true);
 pref("loop.server", "https://loop.services.mozilla.com/v0");
