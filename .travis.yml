@@ -16,3 +16,7 @@ notifications:
 #    - talkilla-travis-results@mozilla.com
 #    - on_success: change
 #    - on_failure: change
+
+install:
+  - pip install --user -r require.pip
+  - npm install
