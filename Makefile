@@ -92,7 +92,7 @@ add-on:
 	mkdir -p $(BUILT)/$@/chrome/content/shared
 	cp -pR shared $(BUILT)/$@/chrome/content
 	$(BABEL) shared --out-dir $(BUILT)/$@/chrome/content/shared
-	cp -pR skin $(BUILT)/$@/chrome/skin
+	cp -pR $@/chrome/skin $(BUILT)/$@/chrome/skin
 
 #
 # Tests
