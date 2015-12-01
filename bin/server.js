@@ -65,33 +65,6 @@ function getConfigFile(req, res) {
   ].join("\n"));
 }
 
-app.get("/content/config.js", getConfigFile);
-app.get("/content/c/config.js", getConfigFile);
-
-// Various mappings to let us end up with:
-// /test - for the test files
-// /ui - for the ui showcase
-// /content - for the standalone files.
-
-app.use("/ui", express.static(path.join(topDir, "built", "ui")));
-app.use("/add-on", express.static(
-  path.join(topDir, "built", "add-on", "chrome", "content")));
-
-// Punch a few holes to stuff in the source.  XXX Not sure if this is a great
-// idea or not.
-
-// We want to make the top-level test directory available...
-app.use("/test", express.static(path.join(topDir, "test")));
-// ...and it points to stuff we want for testing.  Note that the shared unit
-// tests get all their resources from /standalone/shared in the
-// built directory.  The tests themselves, however, come out of the source
-// tree:r
-app.use("/shared/test", express.static(path.join(topDir, "shared", "test")));
-app.use("/standalone/test", express.static(path.join(topDir, "standalone",
-  "test")));
-app.use("/add-on/panels/test", express.static(path.join(topDir, "add-on",
-  "panels", "test")));
-
 // As we don't have hashes on the urls, the best way to serve the index files
 // appears to be to be to closely filter the url and match appropriately.
 function serveIndex(req, res) {
@@ -100,14 +73,36 @@ function serveIndex(req, res) {
   return res.sendFile(path.join(standaloneContentDir, "index.html"));
 }
 
-app.get(/^\/content\/[\w\-]+$/, serveIndex);
-app.get(/^\/content\/c\/[\w\-]+$/, serveIndex);
+//
+// This section is for loading the standalone UI files. Some of these files are
+// also loaded for unit tests.
+//
+app.get("/config.js", getConfigFile);
 
-// XXX This / entry is only currently mostly necessary for some test stuff.
-// I suspect we want to adjust the paths and get rid of this.
+app.get(/^\/[\w\-]+$/, serveIndex);
+
 app.use("/", express.static(standaloneContentDir));
 
-app.use("/content", express.static(standaloneContentDir));
+// Various mappings to let us end up with:
+// /test - for the test files.
+// /ui - for the ui showcase.
+// /add-on - used for tests & ui-showcases; hosts the add-on files.
+
+app.use("/ui", express.static(path.join(topDir, "built", "ui")));
+app.use("/add-on", express.static(
+  path.join(topDir, "built", "add-on", "chrome", "content")));
+
+// We want to make the top-level test directory available...
+app.use("/test", express.static(path.join(topDir, "test")));
+// ...and it points to stuff we want for testing.  Note that the shared unit
+// tests get all their resources from /standalone/shared in the
+// built directory.  The tests themselves, however, come out of the source
+// tree.
+app.use("/shared/test", express.static(path.join(topDir, "shared", "test")));
+app.use("/standalone/test", express.static(path.join(topDir, "standalone",
+  "test")));
+app.use("/add-on/panels/test", express.static(path.join(topDir, "add-on",
+  "panels", "test")));
 
 var server = app.listen(port);
 
