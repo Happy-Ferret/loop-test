@@ -15,8 +15,9 @@ LOOP_LEGAL_WEBSITE_URL := $(shell echo $${LOOP_LEGAL_WEBSITE_URL-"https://www.mo
 LOOP_PRODUCT_HOMEPAGE_URL := $(shell echo $${LOOP_PRODUCT_HOMEPAGE_URL-"https://www.firefox.com/hello/"})
 FIREFOX_VERSION=45.0
 
-NODE_LOCAL_BIN=./node_modules/.bin
-REPO_BIN_DIR=./bin
+NODE_LOCAL_BIN := ./node_modules/.bin
+REPO_BIN_DIR := ./bin
+COPY := cp -pR
 
 install: npm_install
 
@@ -28,7 +29,7 @@ npm_install:
 .PHONY: dist
 dist:
 	mkdir -p dist
-	cp -pR content/* dist
+	$(COPY) content/* dist
 	NODE_ENV="production" $(NODE_LOCAL_BIN)/webpack \
 		-p -v --display-errors
 	sed 's#webappEntryPoint.js#js/standalone.js#' \
@@ -59,40 +60,40 @@ FLAKE8 := $(NODE_LOCAL_BIN)/flake8
 .PHONY: ui
 ui:
 	mkdir -p $(BUILT)/$@
-	cp -pR $@ $(BUILT)
+	$(COPY) $@ $(BUILT)
 	$(BABEL) $@ --out-dir $(BUILT)/$@
 	mkdir -p $(BUILT)/$@/shared
-	cp -pR shared $(BUILT)/$@
+	$(COPY) shared $(BUILT)/$@
 	$(BABEL) shared --out-dir $(BUILT)/$@/shared
 
 .PHONY: standalone
 standalone:
 	mkdir -p $(BUILT)/$@
-	cp -pR $@ $(BUILT)
+	$(COPY) $@ $(BUILT)
 	$(BABEL) $@ --out-dir $(BUILT)/$@
 	mkdir -p $(BUILT)/$@/content/shared
-	cp -pR shared $(BUILT)/$@/content
+	$(COPY) shared $(BUILT)/$@/content
 	$(BABEL) shared --out-dir $(BUILT)/$@/content/shared
 
 .PHONY: add-on
 add-on:
 	mkdir -p $(BUILT)/$@
-	cp -pR $@/chrome.manifest $@/bootstrap.js $(BUILT)/$@
+	$(COPY) $@/chrome.manifest $@/bootstrap.js $(BUILT)/$@
 	sed "s/@FIREFOX_VERSION@/$(FIREFOX_VERSION)/g" add-on/install.rdf.in | \
 		grep -v "#filter substitution" > $(BUILT)/$@/install.rdf
 	mkdir -p $(BUILT)/$@/chrome/content/panels
-	cp -pR $@/panels $(BUILT)/$@/chrome/content
+	$(COPY) $@/panels $(BUILT)/$@/chrome/content
 	$(BABEL) $@/panels --out-dir $(BUILT)/$@/chrome/content/panels
 	mkdir -p $(BUILT)/$@/chrome/content/modules
-	cp -pR $@/chrome/modules $(BUILT)/$@/chrome/content
+	$(COPY) $@/chrome/modules $(BUILT)/$@/chrome/content
 	mkdir -p $(BUILT)/$@/chrome/test
-	cp -pR $@/chrome/test $(BUILT)/$@/chrome
+	$(COPY) $@/chrome/test $(BUILT)/$@/chrome
 	mkdir -p $(BUILT)/$@/chrome/content/preferences
-	cp -pR $@/preferences $(BUILT)/$@/chrome/content
+	$(COPY) $@/preferences $(BUILT)/$@/chrome/content
 	mkdir -p $(BUILT)/$@/chrome/content/shared
-	cp -pR shared $(BUILT)/$@/chrome/content
+	$(COPY) shared $(BUILT)/$@/chrome/content
 	$(BABEL) shared --out-dir $(BUILT)/$@/chrome/content/shared
-	cp -pR $@/chrome/skin $(BUILT)/$@/chrome/skin
+	$(COPY) $@/chrome/skin $(BUILT)/$@/chrome/skin
 
 #
 # Tests
