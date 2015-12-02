@@ -15,7 +15,7 @@ if [[ ! -e "node_modules/.bin/nodemon" ]] ; then
 fi
 
 run () {
-  make build
+  time make build # used to speed up  the build
   node $bin/server.js
 }
 
