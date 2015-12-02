@@ -17,7 +17,7 @@ FIREFOX_VERSION=45.0
 
 NODE_LOCAL_BIN := ./node_modules/.bin
 REPO_BIN_DIR := ./bin
-COPY := cp -pR
+RSYNC := rsync --archive --exclude='*.jsx'
 
 install: npm_install
 
@@ -29,7 +29,7 @@ npm_install:
 .PHONY: dist
 dist:
 	mkdir -p dist
-	$(COPY) content/* dist
+	$(RSYNC) content/* dist
 	NODE_ENV="production" $(NODE_LOCAL_BIN)/webpack \
 		-p -v --display-errors
 	sed 's#webappEntryPoint.js#js/standalone.js#' \
@@ -60,40 +60,40 @@ FLAKE8 := $(NODE_LOCAL_BIN)/flake8
 .PHONY: ui
 ui:
 	mkdir -p $(BUILT)/$@
-	$(COPY) $@ $(BUILT)
+	$(RSYNC) $@ $(BUILT)
 	$(BABEL) $@ --out-dir $(BUILT)/$@
 	mkdir -p $(BUILT)/$@/shared
-	$(COPY) shared $(BUILT)/$@
+	$(RSYNC) shared $(BUILT)/$@
 	$(BABEL) shared --out-dir $(BUILT)/$@/shared
 
 .PHONY: standalone
 standalone:
 	mkdir -p $(BUILT)/$@
-	$(COPY) $@ $(BUILT)
+	$(RSYNC) $@ $(BUILT)
 	$(BABEL) $@ --out-dir $(BUILT)/$@
 	mkdir -p $(BUILT)/$@/content/shared
-	$(COPY) shared $(BUILT)/$@/content
+	$(RSYNC) shared $(BUILT)/$@/content
 	$(BABEL) shared --out-dir $(BUILT)/$@/content/shared
 
 .PHONY: add-on
 add-on:
 	mkdir -p $(BUILT)/$@
-	$(COPY) $@/chrome.manifest $@/bootstrap.js $(BUILT)/$@
+	$(RSYNC) $@/{chrome.manifest,bootstrap.js} $(BUILT)/$@
 	sed "s/@FIREFOX_VERSION@/$(FIREFOX_VERSION)/g" add-on/install.rdf.in | \
 		grep -v "#filter substitution" > $(BUILT)/$@/install.rdf
 	mkdir -p $(BUILT)/$@/chrome/content/panels
-	$(COPY) $@/panels $(BUILT)/$@/chrome/content
+	$(RSYNC) $@/panels $(BUILT)/$@/chrome/content
 	$(BABEL) $@/panels --out-dir $(BUILT)/$@/chrome/content/panels
 	mkdir -p $(BUILT)/$@/chrome/content/modules
-	$(COPY) $@/chrome/modules $(BUILT)/$@/chrome/content
+	$(RSYNC) $@/chrome/modules $(BUILT)/$@/chrome/content
 	mkdir -p $(BUILT)/$@/chrome/test
-	$(COPY) $@/chrome/test $(BUILT)/$@/chrome
+	$(RSYNC) $@/chrome/test $(BUILT)/$@/chrome
 	mkdir -p $(BUILT)/$@/chrome/content/preferences
-	$(COPY) $@/preferences $(BUILT)/$@/chrome/content
+	$(RSYNC) $@/preferences $(BUILT)/$@/chrome/content
 	mkdir -p $(BUILT)/$@/chrome/content/shared
-	$(COPY) shared $(BUILT)/$@/chrome/content
+	$(RSYNC) shared $(BUILT)/$@/chrome/content
 	$(BABEL) shared --out-dir $(BUILT)/$@/chrome/content/shared
-	$(COPY) $@/chrome/skin $(BUILT)/$@/chrome/skin
+	$(RSYNC) $@/chrome/skin $(BUILT)/$@/chrome/
 
 #
 # Tests
