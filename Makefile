@@ -137,9 +137,10 @@ cleanbuild: clean build
 
 test: lint karma
 
-runserver: remove_old_config standalone
-	node $(REPO_BIN_DIR)/server.js
-
+.PHONY: runserver
+runserver: remove_old_config
+	$(REPO_BIN_DIR)/run-server.sh	
+	
 frontend:
 	@echo "Not implemented yet."
 
