@@ -1,4 +1,6 @@
 language: node_js
+addons:
+  firefox: latest
 
 node_js:
   - "0.10"
@@ -21,7 +23,7 @@ install:
   - pip install --user -r require.pip
   - npm install
 
-before_script:
+before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
