@@ -107,6 +107,11 @@ flake8: .venv
 .PHONY: lint
 lint: eslint flake8
 
+karma: build
+	$(NODE_LOCAL_BIN)/karma start test/karma/karma.coverage.desktop.js
+#	$(NODE_LOCAL_BIN)/karma start test/karma/karma.coverage.shared_standalone.js
+
+
 #
 # Build & run
 #
@@ -130,7 +135,7 @@ clean:
 .PHONY: cleanbuild
 cleanbuild: clean build
 
-test: lint
+test: lint karma
 
 runserver: remove_old_config standalone
 	node $(REPO_BIN_DIR)/server.js
