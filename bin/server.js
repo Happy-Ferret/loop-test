@@ -94,6 +94,8 @@ app.use("/add-on", express.static(
 
 // We want to make the top-level test directory available...
 app.use("/test", express.static(path.join(topDir, "test")));
+app.use("/test/coverage", express.static(path.join(topDir, "built", "coverage")));
+
 // ...and it points to stuff we want for testing.  Note that the shared unit
 // tests get all their resources from /standalone/shared in the
 // built directory.  The tests themselves, however, come out of the source
