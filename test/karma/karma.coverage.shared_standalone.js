@@ -10,6 +10,7 @@ module.exports = function(config) {
 
   // List of files / patterns to load in the browser.
   baseConfig.files = baseConfig.files.concat([
+    "built/standalone/content/vendor/l10n-gaia-02ca67948fe8.js",
     "built/standalone/content/shared/vendor/lodash-3.9.3.js",
     "built/standalone/content/shared/vendor/backbone-1.2.1.js",
     "built/standalone/content/shared/vendor/react-0.13.3.js",
@@ -18,7 +19,6 @@ module.exports = function(config) {
     "shared/test/vendor/*.js",
     "shared/test/loop_mocha_utils.js",
     "test/karma/head.js", // Add test fixture container
-    "built/standalone/content/vendor/l10n-gaia-02ca67948fe8.js",
     "built/standalone/content/shared/js/loopapi-client.js",
     "built/standalone/content/shared/js/utils.js",
     "built/standalone/content/shared/js/store.js",
