@@ -109,7 +109,7 @@ lint: eslint flake8
 
 karma: build
 	$(NODE_LOCAL_BIN)/karma start test/karma/karma.coverage.desktop.js
-#	$(NODE_LOCAL_BIN)/karma start test/karma/karma.coverage.shared_standalone.js
+	$(NODE_LOCAL_BIN)/karma start test/karma/karma.coverage.shared_standalone.js
 
 
 #
