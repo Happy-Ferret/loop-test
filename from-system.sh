@@ -18,7 +18,6 @@ rm -Rf skin/{linux,osx,windows}
 cp -R $SYSTEM/skin .
 
 cp -R $SYSTEM/standalone/content/ standalone/content
-mv standalone/content/libs/* standalone/content/vendor/
 
 cp -R $SYSTEM/test/desktop-local/ add-on/panels/test
 cp -R $SYSTEM/test/mochitest/ add-on/chrome/test/mochitest
