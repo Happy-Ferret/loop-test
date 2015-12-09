@@ -140,8 +140,8 @@ test: lint karma
 
 .PHONY: runserver
 runserver: remove_old_config
-	$(REPO_BIN_DIR)/run-server.sh	
-	
+	$(REPO_BIN_DIR)/run-server.sh
+
 frontend:
 	@echo "Not implemented yet."
 
